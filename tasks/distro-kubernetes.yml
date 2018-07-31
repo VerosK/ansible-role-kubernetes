@@ -1,0 +1,29 @@
+- name: Add K8S RPM key
+  rpm_key:
+    state: present
+    key: '{{ item }}'
+  with_items:
+      - https://packages.cloud.google.com/yum/doc/yum-key.gpg
+      - https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+
+- name: Disable kubernetes.io repository
+  yum_repository:
+    name: kubernetes-el7
+    baseurl: http://yum.kubernetes.io/repos/kubernetes-el7-x86_64
+    description: "Kubernetes from http://kubernetes.io/docs/getting-started-guides/kubeadm/"
+    state: absent
+    enabled: true
+    gpgcheck: true
+    repo_gpgcheck: true
+    gpgkey: >
+      https://packages.cloud.google.com/yum/doc/yum-key.gpg
+      https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+
+- name: Install k8s daemons
+  yum:
+    name: '{{ item }}'
+    state: installed
+  with_items:
+      - kubernetes-master
+      - kubernetes-node
+      - kubernetes-client

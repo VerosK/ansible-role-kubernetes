@@ -1,0 +1,88 @@
+
+- name: Enable IP forwarding
+  sysctl:
+    name: net.ipv4.ip_forward
+    value: 1
+    sysctl_file: /etc/sysctl.d/90-ipforward.conf
+    sysctl_set: true
+
+- name: Create /var/lib/kubernetes
+  file:
+    path: /var/lib/kubernetes
+    state: directory
+
+- name: Create logdir
+  file:
+    path: '{{ k8s_logdir }}'
+    owner: '{{ k8s_logdir_user }}'
+    group: '{{ k8s_logdir_user }}'
+    state: directory
+
+- name: Add rsyslog config
+  template:
+    src: '{{ k8s_rsyslog_template }}'
+    dest: '{{ k8s_rsyslog_config }}'
+  when: k8s_with_rsyslog_routing
+  notify: Restart rsyslog
+
+- name: Add logrotate config
+  template:
+    src: '{{ k8s_logrotate_template }}'
+    dest: '{{ k8s_logrotate_config }}'
+  when: k8s_with_logrotate
+
+- name: Restart rsyslog when needed
+  meta: flush_handlers
+
+- include: private-kubernetes.yml   # for 1.4.3
+  when: kubernetes_use_private_repo
+
+- include: distro-kubernetes.yml     # for testing 1.2.0
+  when: not kubernetes_use_private_repo
+
+- name: Upload K8S token config
+  template:
+    src: token.csv.j2
+    dest: /var/lib/kubernetes/token.csv
+    owner: kube
+    group: kube
+
+- name: Create kubelet manifests dir
+  file:
+      path: /var/lib/kubelet/manifests
+      state: directory
+
+- name: Setup k8s config
+  copy:
+    content: '{{ item.content }}'
+    dest: '{{ item.name }}'
+    backup: true
+  with_items: '{{ k8s_configs }}'
+
+- name: Start apiserver on master
+  service:
+    name: '{{ item }}'
+    state: started
+    enabled: yes
+  with_items:
+    - kube-apiserver
+    - kube-controller-manager
+    - kube-scheduler
+  when: k8s_is_master|default(False)
+  register: _apiserver_start
+
+- name: Wait for kube-apiserver to start    # FIXME: Drop this later
+  pause:
+    seconds: 5
+  when: _apiserver_start|changed
+
+- name: Start kubelets on minions
+  service:
+    name: '{{ item }}'
+    state: started
+    enabled: yes
+  with_items:
+     - kubelet
+     - kube-proxy
+  when: k8s_is_minion|default(False)
+

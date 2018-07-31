@@ -1,0 +1,32 @@
+
+k8s_cluster_name: default
+
+k8s_configs: []
+#k8s_configs:
+#  - name: /etc/kubernetes/kubelet
+#    content: >
+#        This is new config
+#        # XXX
+
+k8s_logdir: /var/log/kubernetes/
+k8s_logdir_user: kube
+
+k8s_hyperkube_path: /usr/lib/hyperkube
+k8s_apiserver_path: '{{ k8s_hyperkube_path }}/apiserver'
+k8s_controller_manager_path : '{{ k8s_hyperkube_path }}/controller-manager'
+k8s_kubeproxy_path: '{{ k8s_hyperkube_path }}/proxy'
+k8s_scheduler_path : '{{ k8s_hyperkube_path }}/scheduler'
+k8s_kubelet_path : '{{ k8s_hyperkube_path }}/kubelet'
+
+k8s_default_token: '!admin'
+
+# Add routing of rsyslog
+k8s_with_rsyslog_routing: true
+k8s_rsyslog_template: "etc/rsyslog/kubernetes.conf.j2"
+k8s_rsyslog_config: "/etc/rsyslog.d/kubernetes.conf"
+
+k8s_with_logrotate: '{{ k8s_with_rsyslog_routing }}'
+k8s_logrotate_template: "etc/logrotate/kubernetes.j2"
+k8s_logrotate_config: "/etc/logrotate.d/kubernetes"
+
+k8s_rsyslog_service: rsyslog

@@ -1,0 +1,26 @@
+- name: Add kube user
+  user:
+    name: kube
+    comment: Kubernetes service user
+    state: present
+
+- name: Create directories
+  file:
+    path: /etc/kubernetes
+    state: directory
+
+- name: Create initial system config
+  template:
+    src: '{{ item }}'
+    dest: '/{{ item }}'
+    force: false      # don't overwrite
+  with_items: '{{ kubernetes_private_mirror_systemconfig }}'
+
+- name: Create initial systemd units
+  template:
+    src: '{{ item }}.j2'
+    dest: '/{{ item }}'
+    force: true
+  with_items: '{{ kubernetes_private_mirror_systemd_units }}'
+  notify: systemctl daemon-reload
+

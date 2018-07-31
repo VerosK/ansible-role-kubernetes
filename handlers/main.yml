@@ -1,0 +1,8 @@
+- name: systemctl daemon-reload
+  shell: systemctl daemon-reload
+
+- name: Restart rsyslog
+  service:
+    name: '{{ k8s_rsyslog_service }}'
+    state: restarted
+  when: k8s_rsyslog_service is defined

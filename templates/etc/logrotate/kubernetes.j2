@@ -1,0 +1,11 @@
+/var/log/kubernetes/*.log
+{
+    missingok
+    sharedscripts
+    postrotate
+        systemctl kill -s SIGHUP {{ k8s_rsyslog_service }}.service
+    endscript
+    compress
+}
+
+# {{  ansible_managed }}

@@ -1,0 +1,3 @@
+#
+# Run controller in HA mode
+KUBE_CONTROLLER_MANAGER_ARGS="--leader-elect=true"
