@@ -18,7 +18,7 @@ ExecStart={{ k8s_kubelet_path }} \
         $KUBELET_POD_INFRA_CONTAINER \
         $KUBELET_ARGS
 Restart=on-failure
-SyslogIdentifier=kube-proxy
+SyslogIdentifier=kubelet
 
 StandardOutput=syslog
 
