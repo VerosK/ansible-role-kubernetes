@@ -1,33 +1,33 @@
 # {{ ansible_managed }}
-# this line is magic {{ 1024|random }}
+
 
 if $programname == 'kubelet'  then {
         action(type="omfile" File="/var/log/kubernetes/kubelet.log")
-        action(type="omfile" File="/var/log/kubernetes/worker.log")
+        #action(type="omfile" File="/var/log/kubernetes/worker.log")
         stop
 }
 if $programname == 'kube-proxy'  then {
         action(type="omfile" File="/var/log/kubernetes/proxy.log")
-        action(type="omfile" File="/var/log/kubernetes/worker.log")
+        #action(type="omfile" File="/var/log/kubernetes/worker.log")
         stop
 }
 
 if $programname == 'proxy'  then {
         action(type="omfile" File="/var/log/kubernetes/proxy.log")
-        action(type="omfile" File="/var/log/kubernetes/worker.log")
+        #action(type="omfile" File="/var/log/kubernetes/worker.log")
         stop
 }
 
 
 if $programname == 'kube-apiserver'  then {
         action(type="omfile" File="/var/log/kubernetes/apiserver.log")
-        action(type="omfile" File="/var/log/kubernetes/manager.log")
+        #action(type="omfile" File="/var/log/kubernetes/manager.log")
         stop
 }
 
 if $programname == 'apiserver'  then {
         action(type="omfile" File="/var/log/kubernetes/apiserver.log")
-        action(type="omfile" File="/var/log/kubernetes/manager.log")
+        #action(type="omfile" File="/var/log/kubernetes/manager.log")
         stop
 }
 
@@ -40,23 +40,22 @@ if $programname == 'kube-scheduler'  then {
 
 if $programname == 'scheduler'  then {
         action(type="omfile" File="/var/log/kubernetes/scheduler.log")
-        action(type="omfile" File="/var/log/kubernetes/manager.log")
+        #action(type="omfile" File="/var/log/kubernetes/manager.log")
         stop
 }
 
 
 if $programname == 'kube-controller-manager'  then {
         action(type="omfile" File="/var/log/kubernetes/controller-manager.log")
-        action(type="omfile" File="/var/log/kubernetes/manager.log")
+        #action(type="omfile" File="/var/log/kubernetes/manager.log")
         stop
 }
 
 if $programname == 'controller-manager'  then {
         action(type="omfile" File="/var/log/kubernetes/controller-manager.log")
-        action(type="omfile" File="/var/log/kubernetes/manager.log")
+        #action(type="omfile" File="/var/log/kubernetes/manager.log")
         stop
 }
-
 
 if $programname == 'etcd'  then {
         action(type="omfile" File="/var/log/kubernetes/etcd.log")
