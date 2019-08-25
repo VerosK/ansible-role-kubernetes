@@ -12,10 +12,10 @@ k8s_logdir: /var/log/kubernetes/
 k8s_logdir_user: kube
 
 k8s_hyperkube_path: /usr/lib/hyperkube
-k8s_apiserver_path: '{{ k8s_hyperkube_path }}/apiserver'
-k8s_controller_manager_path : '{{ k8s_hyperkube_path }}/controller-manager'
-k8s_kubeproxy_path: '{{ k8s_hyperkube_path }}/proxy'
-k8s_scheduler_path : '{{ k8s_hyperkube_path }}/scheduler'
+k8s_apiserver_path: '{{ k8s_hyperkube_path }}/kube-apiserver'
+k8s_controller_manager_path : '{{ k8s_hyperkube_path }}/kube-controller-manager'
+k8s_kubeproxy_path: '{{ k8s_hyperkube_path }}/kube-proxy'
+k8s_scheduler_path : '{{ k8s_hyperkube_path }}/kube-scheduler'
 k8s_kubelet_path : '{{ k8s_hyperkube_path }}/kubelet'
 
 k8s_default_token: '!admin'
